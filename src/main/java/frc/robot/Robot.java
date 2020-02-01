@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.RightTurn;
-import frc.paths.TwoFeetForward;
+import frc.paths.ThreeFeetForward;
 import frc.robot.command_groups.AutoRoutines;
 import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;

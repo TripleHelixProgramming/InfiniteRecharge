@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.RightTurn;
-import frc.paths.TwoFeetForward;
+import frc.paths.ThreeFeetForward;
 
 public class AutoRoutines {
 	
@@ -21,9 +21,9 @@ public class AutoRoutines {
 		LEFT_AUTO(25.0, 1.5),
 		MIDDLE_AUTO(0.0, 3),
 		RIGHT_AUTO(30.0, 2.5),
-		BASELINE_AUTO(0.0, 0),
+		BASELINE_AUTO(0.0, 0), // Just move off the baseline
 		TEST_RIGHT_TURN(0.0, 0),
-		TEST_2FEET_FORWARD(0.0, 0),
+		TEST_3FEET_FORWARD(0.0, 0),
 		NONE(0.0, 0);
 		
 		private double pigeon_offset;
@@ -90,10 +90,10 @@ public class AutoRoutines {
 		// 	);
 		case TEST_RIGHT_TURN:
 			return new AutoCG(new RightTurn());
-		case TEST_2FEET_FORWARD:
-			return new AutoCG(new TwoFeetForward());
+		case TEST_3FEET_FORWARD:
+			return new AutoCG(new ThreeFeetForward());
 		case BASELINE_AUTO:   // Just get off the baseline
-			return new AutoCG(new TwoFeetForward());
+			return new AutoCG(new ThreeFeetForward());
 			// return new AutoCG(new GetOffBaseline());
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
