@@ -38,21 +38,20 @@ public class TurnToTarget extends Command {
     }
 
     protected void execute() {
-        // There could be a timing issue here with the light JUST being turned on.
-        // May need some sort of delay to give the camera time to acquire a target.
-        final double angleToTarget = m_camera.getRotationalDegreesToTarget();
-        if (TOLERANCE < Math.abs(angleToTarget)) {
-            final double headingToTarget = m_drivetrain.getHeading() + angleToTarget; 
-            Scheduler.getInstance().add(new TurnToAngle(headingToTarget));
-            m_targetAcquired = true;
-        } else if (0.0 != angleToTarget) { // Angle to target being exactly zero indicates no target acquired
+        if (m_camera.isTargetFound()) { // Hunt for a target
+            final double angleToTarget = m_camera.getRotationalDegreesToTarget();
+            if (TOLERANCE < Math.abs(angleToTarget)) { 
+                // Spawn a TurnToAngle to turn to the target
+                final double headingToTarget = m_drivetrain.getHeading() + angleToTarget; 
+                Scheduler.getInstance().add(new TurnToAngle(headingToTarget));
+            }
+            m_camera.setDriverMode(); // Turn the targeting lights off
             m_targetAcquired = true;
         }
     }
 
     @Override
     protected boolean isFinished() {
-        // TODO Auto-generated method stub
         return m_targetAcquired;
     }
 }
