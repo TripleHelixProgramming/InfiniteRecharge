@@ -22,7 +22,7 @@ public abstract class AbstractVisionDriving extends Command {
 
   // private final PIDController controller = new PIDController(10000, 0, 0); //.05,0,0
   // private final Notifier notifier = new Notifier(this::calculate);
-  private final Camera camera;
+  protected final Camera camera;
   private double angleToTarget, output;
 
   // private boolean isFinished = false;
@@ -46,9 +46,11 @@ public abstract class AbstractVisionDriving extends Command {
     // controller.setReference(0);
     double kP = 0.125; // 0.15
     double kF = 0.65; //.5
-    angleToTarget = camera.getRotationalDegreesToTarget();
-    output = -angleToTarget * kP - kF*(Math.abs(angleToTarget) / angleToTarget);
-    getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
+    if (camera.isTargetFound()) {
+      angleToTarget = camera.getRotationalDegreesToTarget();
+      output = -angleToTarget * kP - kF*(Math.abs(angleToTarget) / angleToTarget);
+      getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
+    }
   }
 
   @Override

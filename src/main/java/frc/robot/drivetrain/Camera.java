@@ -13,29 +13,29 @@ import edu.wpi.first.wpilibj.Preferences;
 
 public class Camera {
 
-    private static String name;
+    private final String name;
+
     private double cameraAlignment;
+    private double cameraHeight = 21.25; // (inches) currently the height on the programming bot
+    private double bottomTargetHeight = 81; // (inches) use 81.25 for actual arena height
+    private double cameraElevation = 26.5; // (degrees) currently the angle on the programming bot (was 27.75)
 
-    static double cameraHeight = 21.25; // (inches) currently the height on the programming bot
-    static double bottomTargetHeight = 81; // (inches) use 81.25 for actual arena height
-    static double cameraElevation = 26.5; // (degrees) currently the angle on the programming bot (was 27.75)
-
-    public Camera(String name) {
+    public Camera(final String name) {
         this.name = name;
-        cameraAlignment = Preferences.getInstance().getDouble(name + "-alignment", 0);
+        this.cameraAlignment = Preferences.getInstance().getDouble(name + "-alignment", 0);
     }
 
-    public double getCameraAlignment() {
-        return cameraAlignment;
+    public Camera(final String name, final double cameraHeight, final double bottomTargetHeight,
+            final double cameraElevation) {
+        this.name = name;
+        this.cameraAlignment = Preferences.getInstance().getDouble(name + "-alignment", 0);
+        this.cameraHeight = cameraHeight;
+        this.bottomTargetHeight = bottomTargetHeight;
+        this.cameraElevation = cameraElevation;
     }
 
-    public void setCameraAlignment(double cameraAlignment) {
-        this.cameraAlignment = cameraAlignment;
-        Preferences.getInstance().putDouble(name + "-alignment", cameraAlignment);
-    }
-
-    public void setToMode() {
-        getDefault().getTable(name).getEntry("pipeline").setNumber(0);
+    public void setToPipeline(final int pipeline) {
+        getDefault().getTable(name).getEntry("pipeline").setNumber(pipeline);
     }
 
     public void setDockingMode() {
@@ -53,65 +53,102 @@ public class Camera {
     }
 
     public boolean isTargetFound() {
-        double v = getDefault().getTable(name).getEntry("tx").getDouble(0);
-        return v != 0;
+        final double tv = getDefault().getTable(name).getEntry("tv").getDouble(0);
+        return 0 != tv;
     }
 
     public boolean isTargetClose() {
-        return getVerticalDegreesToTarget() > getCameraAlignment();
+    
+        return isTargetFound() && (getVerticalDegreesToTarget() > getCameraAlignment());
     }
 
     public double getRotationalDegreesToTarget() {
-        return getDefault().getTable(name).getEntry("tx").getDouble(0);
+        return getDefault().getTable(name).getEntry("tx").getDouble(Double.POSITIVE_INFINITY);
     }
 
-    public static double getVerticalDegreesToTarget() {
-        return getDefault().getTable(name).getEntry("ty").getDouble(0);
+    public double getVerticalDegreesToTarget() {
+        return getDefault().getTable(name).getEntry("ty").getDouble(Double.POSITIVE_INFINITY);
     }
 
     public double getAreaOfTarget() {
-        return getDefault().getTable(name).getEntry("ta").getDouble(0);
-    }
-
-    public void getType() {
-        // SmartDashboard.putString("Type", "" +
-        // getDefault().getTable(name).getEntry("tcornx").getNumberArray(new Number
-        // [4])[0]);
+        return getDefault().getTable(name).getEntry("ta").getDouble(Double.NEGATIVE_INFINITY);
     }
 
     public double getTargetSkew() {
         return getVerticalDegreesToTarget() / (getAreaOfTarget() - Math.abs(getRotationalDegreesToTarget() * 0.01));
     }
 
-    public static double calculateDistanceToTarget() {
-        return (bottomTargetHeight - cameraHeight)
-                / Math.tan(Math.toRadians(cameraElevation + getVerticalDegreesToTarget()));
-        // calculates ground distane from robot to target, only accurate when tx = 0
+    /**
+     * calculates ground distane from robot to target, only accurate when tx = 0 (or very close to it).
+     * @return
+     **/
+    public double calculateDistanceToTarget() {
+        return (getBottomTargetHeight() - getCameraHeight())
+                / Math.tan(Math.toRadians(getCameraElevation() + getVerticalDegreesToTarget()));
     }
 
     // public static int determineHoodPostion() {
-    //     if (calculateDistanceToTarget() > 10)
-    //         return 1;
-    //     return 0;
-    //  }
+    // if (calculateDistanceToTarget() > 10)
+    // return 1;
+    // return 0;
+    // }
 
     public double calculateRPM() {
 
         // double calcRPMNum = Math.pow(calculateDistanceToTarget(),2)*g;
-        // double calcRPMDenFirstTerm = calculateDistanceToTarget()*Math.sin(Math.toRadians(2*shooterElevation));
-        // double calcRPMDenSecondTerm = 2*h*Math.pow(Math.cos(Math.toRadians(shooterElevation)), 2);
-        // double linearVelocity = Math.sqrt((calcRPMNum)/(calcRPMDenFirstTerm-calcRPMDenSecondTerm));
-        
+        // double calcRPMDenFirstTerm =
+        // calculateDistanceToTarget()*Math.sin(Math.toRadians(2*shooterElevation));
+        // double calcRPMDenSecondTerm =
+        // 2*h*Math.pow(Math.cos(Math.toRadians(shooterElevation)), 2);
+        // double linearVelocity =
+        // Math.sqrt((calcRPMNum)/(calcRPMDenFirstTerm-calcRPMDenSecondTerm));
+
         // return (int)((linearVelocity*60)/(2*Math.PI*r));
         // if (determineHoodPostion() == 1)
-        //     return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
+        // return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
         // return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
         // return 39.5 * (calculateDistanceToTarget() / 12.0) + 1987.0; BOT 2
         return 21.8 * (calculateDistanceToTarget() / 12.0) + 2486.4;
     }
 
-    public static void main(String... args) {
-        Camera camera = new Camera("x");
+    /**
+     * Getters & Setters for member fields.
+     **/
+    public double getCameraElevation() {
+        return cameraElevation;
+    }
+
+    public void setCameraElevation(final double cameraElevation) {
+        this.cameraElevation = cameraElevation;
+    }
+
+    public double getBottomTargetHeight() {
+        return bottomTargetHeight;
+    }
+
+    public void setBottomTargetHeight(final double bottomTargetHeight) {
+        this.bottomTargetHeight = bottomTargetHeight;
+    }
+
+    public double getCameraHeight() {
+        return cameraHeight;
+    }
+
+    public void setCameraHeight(final double cameraHeight) {
+        this.cameraHeight = cameraHeight;
+    }
+
+    public double getCameraAlignment() {
+        return cameraAlignment;
+    }
+
+    public void setCameraAlignment(final double cameraAlignment) {
+        this.cameraAlignment = cameraAlignment;
+        Preferences.getInstance().putDouble(name + "-alignment", cameraAlignment);
+    }
+
+    public static void main(final String... args) {
+        final Camera camera = new Camera("x");
         System.out.println(camera.getTargetSkew());
     }
 }

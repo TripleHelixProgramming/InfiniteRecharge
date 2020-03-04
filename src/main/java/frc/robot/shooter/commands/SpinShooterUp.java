@@ -10,6 +10,7 @@ package frc.robot.shooter.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.drivetrain.Camera;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.oi.commands.RumbleController;
 import frc.robot.shooter.Position;
@@ -78,10 +79,15 @@ public class SpinShooterUp extends Command {
     //  if shooting from a unknown position. Use camera to get distance to
     //  target, then calculate the setpoint and expected rpms for that distance.
     if (position == Position.UNKNOWN) {
-      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM() + rpmDelta;
+        Camera fc = Drivetrain.getDrivetrain().getFrontCamera();
+        if (fc.isTargetFound()) {
+          rpm = fc.calculateRPM() + rpmDelta;
+        } else { 
+          // Unknown distance & no target. Now what?
+        }
+    }
       // Shooter.getShooter().setHoodPosition(Drivetrain.getDrivetrain().getFrontCamera().determineHoodPostion());
-      Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
-    } 
+    Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
   }
 
   // Make this return true when this Command no longer needs to run execute()
