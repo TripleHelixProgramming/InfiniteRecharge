@@ -16,29 +16,27 @@ import com.team2363.logger.HelixEvents;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.drivetrain.Camera;
+import frc.robot.limelight.Limelight;
 
 public abstract class AbstractVisionDriving extends Command {
 
-  private final Camera camera;
   private double angleToTarget, output;
 
   public AbstractVisionDriving() {
     requires(getDrivetrain());
-    camera = getDrivetrain().getFrontCamera();
   }
 
   public abstract double getThrottle();
 
   @Override
   protected void initialize() {
-    camera.setDockingMode();
+    Limelight.getLimelight().setAimingMode();
   }
 
   @Override protected void execute() {
     double kP = 0.11; // 0.125
     double kF = 0.8; //.65
-    angleToTarget = camera.getRotationalDegreesToTarget();
+    angleToTarget = Limelight.getLimelight().getXOffset();
     output = -angleToTarget * kP - kF*(Math.abs(angleToTarget) / angleToTarget);
     getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
   }
@@ -51,7 +49,7 @@ public abstract class AbstractVisionDriving extends Command {
   @Override
   protected void end() {
     HelixEvents.getInstance().addEvent("DRIVETRAIN", "Stopping Vision Driving");
-    camera.setDriverMode();
+    Limelight.getLimelight().setDriverMode();
   }
 
   @Override

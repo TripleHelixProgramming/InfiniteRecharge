@@ -31,15 +31,14 @@ import frc.paths.RightTurn;
 import frc.paths.TenFeetForward;
 import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
+import frc.robot.limelight.Limelight;
 import frc.robot.command_groups.AutoRoutines;
 import frc.robot.command_groups.AutoRoutines.AutoMode;
-import frc.robot.drivetrain.Camera;
 
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.commands.AutoVisionDriving;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.PathFollower;
-import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 import frc.robot.magazine.Magazine;
 import frc.robot.oi.OI;
 
@@ -52,7 +51,6 @@ import frc.robot.oi.OI;
  */
 public class Robot extends TimedRobot {
   Command autonomousCommand;
-  Camera camera = new Camera("limelight-front");
   private final Compressor compressor = new Compressor();
 
   /**
@@ -66,7 +64,6 @@ public class Robot extends TimedRobot {
     initializeSubsystems();
     getDrivetrain().resetHeading();
     HelixEvents.getInstance().startLogging();
-    SmartDashboard.putData(new SetFrontCameraAlignment());
   }
 
   private void initializeSubsystems() {
@@ -94,7 +91,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putBoolean("Target Aquired", Drivetrain.getDrivetrain().getFrontCamera().isTargetFound());    
+  
   }
 
   /**
@@ -111,16 +108,15 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
     SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
-    SmartDashboard.putNumber("Target Skew", camera.getTargetSkew());
 
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
-    SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
-    SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
+    SmartDashboard.putNumber("Distance", Limelight.getLimelight().getDistanceToTarget());
+    SmartDashboard.putNumber("rpm", Limelight.getLimelight().getRPM());
 
     SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
 
-    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
+    Limelight.getLimelight().setDriverMode();
   }
 
   /**
@@ -137,7 +133,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     getDrivetrain().resetHeading();
-    getDrivetrain().getFrontCamera().setDriverMode();
+    Limelight.getLimelight().setDriverMode();
 
     AutoMode mode;
     
@@ -177,7 +173,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    getDrivetrain().getFrontCamera().setDriverMode();
+    Limelight.getLimelight().setDriverMode();
   }
 
   /**

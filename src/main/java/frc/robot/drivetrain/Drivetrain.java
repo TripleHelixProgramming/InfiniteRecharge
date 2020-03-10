@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.commands.SampleDrive;
+import frc.robot.drivetrain.commands.TestDrive;
 import frc.robot.drivetrain.commands.CarsonDrive;
 
 public class Drivetrain extends Subsystem {
@@ -65,7 +66,6 @@ public class Drivetrain extends Subsystem {
 
   // private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
-  private final Camera frontCamera = new Camera("limelight-front");
   PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   private Drivetrain() {
@@ -146,7 +146,7 @@ public class Drivetrain extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new CarsonDrive());
+    setDefaultCommand(new TestDrive());
   }
 
   private void setVelocityOutput(final double leftVelocity, final double rightVelocity) {
@@ -270,10 +270,6 @@ public class Drivetrain extends Subsystem {
 
   public double getRightPosition() {
     return  HelixMath.convertFromTicksToFeet(right.getSelectedSensorPosition(), WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION);
-  }
-
-  public Camera getFrontCamera() {
-    return frontCamera;
   }
 
   @Override

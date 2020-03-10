@@ -7,6 +7,7 @@
 
 package frc.robot.drivetrain.commands;
 import frc.robot.drivetrain.Drivetrain;
+import frc.robot.limelight.Limelight;
 
 public class AutoAimInPlace extends AbstractVisionDriving {
  
@@ -17,8 +18,7 @@ public class AutoAimInPlace extends AbstractVisionDriving {
 
   @Override
   protected boolean isFinished() {
-
-    if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 0.5 && Drivetrain.getDrivetrain().getFrontCamera().isTargetFound()) {
+    if (Math.abs(Limelight.getLimelight().getXOffset()) < 0.5 && Limelight.getLimelight().getTarget()) {
       return true;
     }
     return false;

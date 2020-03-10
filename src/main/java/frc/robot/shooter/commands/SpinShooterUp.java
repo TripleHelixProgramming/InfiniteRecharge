@@ -11,6 +11,7 @@ import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.drivetrain.Drivetrain;
+import frc.robot.limelight.Limelight;
 import frc.robot.oi.commands.RumbleController;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
@@ -78,7 +79,7 @@ public class SpinShooterUp extends Command {
     //  if shooting from a unknown position. Use camera to get distance to
     //  target, then calculate the setpoint and expected rpms for that distance.
     if (position == Position.UNKNOWN) {
-      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM() + rpmDelta;
+      rpm = Limelight.getLimelight().getRPM() + rpmDelta;
       // Shooter.getShooter().setHoodPosition(Drivetrain.getDrivetrain().getFrontCamera().determineHoodPostion());
       Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
     } 

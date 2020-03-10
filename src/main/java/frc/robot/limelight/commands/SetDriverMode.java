@@ -5,19 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.drivetrain.commands;
+package frc.robot.limelight.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.drivetrain.Drivetrain;
+import frc.robot.limelight.Limelight;
 
-public class DisableLights extends Command {
-  public DisableLights() {
+public class SetDriverMode extends Command {
+  public SetDriverMode() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
+    Limelight.getLimelight().setDriverMode();
   }
 
   // Called repeatedly when this Command is scheduled to run

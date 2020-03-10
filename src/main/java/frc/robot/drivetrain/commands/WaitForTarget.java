@@ -10,14 +10,13 @@ package frc.robot.drivetrain.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.drivetrain.Drivetrain;
+import frc.robot.limelight.Limelight;
 
 public class WaitForTarget extends Command {
 
   @Override
   protected boolean isFinished() {
-    return Drivetrain.getDrivetrain().getFrontCamera().isTargetFound() 
-      && Drivetrain.getDrivetrain().getFrontCamera().isTargetClose();
+    return Limelight.getLimelight().getTarget();
   }
 
   @Override
