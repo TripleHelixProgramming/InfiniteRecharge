@@ -17,21 +17,25 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class TurnToAngle extends Command {
 
-  private final PIDController controller = new PIDController(0.027, 0.0, 0.0);
+  protected final PIDController controller = new PIDController(0.027, 0.0, 0.0);
   private final Notifier notifier = new Notifier(this::calculate);
-  private double angle;
+  protected double angle;
+  private static final double TOLERANCE = 1.0 ;
 
   private boolean isFinished = false;
 
-  public TurnToAngle(double angle) {
+  public TurnToAngle() {
     requires(getDrivetrain());
 
     // getPIDController().setToleranceBuffer(10);
-    controller.setAbsoluteTolerance(1);
+    controller.setAbsoluteTolerance(TOLERANCE);
     controller.setContinuous(true);
     controller.setInputRange(-180, 180);
     controller.setOutputRange(-.3, .3);  // Output in range of throttle you want to turn at
+  }
 
+  public TurnToAngle(double angle) {
+    this();
     this.angle = angle;
   }
 
@@ -48,7 +52,7 @@ public class TurnToAngle extends Command {
 
   // Make this return true when this Command no longer needs to run execute()
   protected boolean isFinished() {
-    if (Math.abs(angle - getDrivetrain().getHeading()) < 1) {
+    if (Math.abs(angle - getDrivetrain().getHeading()) < TOLERANCE) {
       return true;
     }
     return false;

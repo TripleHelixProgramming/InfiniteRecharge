@@ -66,6 +66,10 @@ public class Camera {
         return getDefault().getTable(name).getEntry("tx").getDouble(Double.POSITIVE_INFINITY);
     }
 
+    public double getHeadingToTarget() {
+        return (Drivetrain.getDrivetrain().getHeading() - getRotationalDegreesToTarget()) % 180.0;
+    }
+
     public double getVerticalDegreesToTarget() {
         return getDefault().getTable(name).getEntry("ty").getDouble(Double.POSITIVE_INFINITY);
     }

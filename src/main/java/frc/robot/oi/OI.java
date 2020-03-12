@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
+import frc.robot.command_groups.AimAndShootCG;
 import frc.robot.command_groups.AimAndSpinCG;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
@@ -97,6 +98,9 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
 
     new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new StowTelescope());
+
+    // **** FOR TESTING!!!!
+    new JoystickButton(operator, ControllerMap.PS4_SHARE).whenPressed(new AimAndShootCG());
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());

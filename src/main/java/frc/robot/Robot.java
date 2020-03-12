@@ -94,7 +94,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
     SmartDashboard.putBoolean("Target Aquired", Drivetrain.getDrivetrain().getFrontCamera().isTargetFound());    
+    SmartDashboard.putNumber("Heading To Target", Drivetrain.getDrivetrain().getFrontCamera().getHeadingToTarget());
+    SmartDashboard.putNumber("Degrees To Target", Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget());    
   }
 
   /**
@@ -110,7 +113,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
-    SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
     SmartDashboard.putNumber("Target Skew", camera.getTargetSkew());
 
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
