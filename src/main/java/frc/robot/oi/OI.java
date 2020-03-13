@@ -13,6 +13,7 @@ import static com.team2363.utilities.ControllerPatroller.getPatroller;
 import com.team2363.utilities.ControllerMap;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
@@ -41,6 +42,8 @@ import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
+import frc.robot.status.LedAction;
+import frc.robot.status.commands.ActionCommand;
 import frc.robot.telescope.commands.StowTelescope;
 import edu.wpi.first.wpilibj.buttons.Button;
 
@@ -120,6 +123,14 @@ public class OI {
 
     new CTrigger().whenActive(new ClimbCG());
 
+    // TODO: Set initial color state - This seems like the wrong spot to do this (OI).
+    
+
+    // Do things with the status leds/saber based on match time.
+    // TODO: Get MatchTriggerTime to know auto vs. teleOp.
+    new MatchTimeTrigger(94).whenActive(new ActionCommand(new LedAction(0,255,0,127)));
+    new MatchTimeTrigger(119).whenActive(new ActionCommand(new LedAction(255,0,255,127)));
+
     // Bumping up and down  
     new Button() {
         @Override
@@ -191,6 +202,27 @@ public class OI {
     @Override
     public boolean get(){
       return (driver.getRawAxis(ControllerMap.X_BOX_RIGHT_TRIGGER) > 0.8);    
+    }
+  }
+
+  // Only invokes once.
+  class MatchTimeTrigger extends Trigger {
+
+    int matchTime = 0;
+
+    public MatchTimeTrigger(int matchTime) {
+      this.matchTime = matchTime;
+    }
+
+    @Override
+    public boolean get() {
+      double t = Timer.getMatchTime();
+
+      if ((t > 0) && (t >= matchTime)) {
+        return true;
+      }
+
+      return false;
     }
   }
 

@@ -14,17 +14,9 @@ public class ScannerAction extends LedAction {
     private boolean forward = true;
     private double chaseFactor = 0.10;
 
-    private int red = 0;
-    private int green = 0;
-    private int blue = 0;
-    private int brightness = 0;
-
-    // Default will run a rainbow pattern.
+    // Default runs forever.
     public ScannerAction() {
         super();
-
-        red = 255;
-        brightness = 100;
 
         // Run forever, 10ms
         intervalCount = -1;
@@ -32,12 +24,7 @@ public class ScannerAction extends LedAction {
     }
 
     public ScannerAction(int red, int green, int blue, int brightness) {
-        super();
-
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.brightness = brightness;
+        super(red, green, blue, brightness);
 
         // Run forever, 10ms
         intervalCount = -1;
@@ -46,9 +33,15 @@ public class ScannerAction extends LedAction {
 
     protected void updateBuffer() {
 
-        int r = (int) (red * (brightness / 255.0));
-        int g = (int) (green * (brightness / 255.0));
-        int b = (int) (blue * (brightness / 255.0));
+        double br = brightness / 255.0;
+        int r = (int) (red * br);
+        int g = (int) (green * br);
+        int b = (int) (blue * br);
+
+        double bBr = backBrightness / 255.0;
+        int bRed = (int) (backRed * bBr);
+        int bGreen = (int) (backGreen * bBr);
+        int bBlue = (int) (backBlue * bBr);
 
         int chaseCount = (int) (buffer.getLength() * chaseFactor);
         
@@ -78,7 +71,7 @@ public class ScannerAction extends LedAction {
 
                     buffer.setRGB(i, cr, cg, cb);
                 } else {
-                    buffer.setRGB(i, 0, 0, 0);
+                    buffer.setRGB(i, bRed, bGreen, bBlue);
                 }
             }
         }

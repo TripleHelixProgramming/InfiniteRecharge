@@ -17,7 +17,7 @@ public class PowerUpAction extends LedAction {
     private int blue = 0;
     private int brightness = 0;
 
-    // Default will run a rainbow pattern.
+    // Default is red.
     public PowerUpAction() {
         super();
 

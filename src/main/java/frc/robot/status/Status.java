@@ -106,20 +106,24 @@ public class Status extends Subsystem {
 
     // Things to do when boot starts.
     // Note: these can't be commands since commands require enablement.
+    // Note: this is going away, do what you want with status somewhere else.
     private void scheduleBootActions() {
 
         ScannerAction scannerAction = new ScannerAction(245, 0, 255, 90);
+        scannerAction.setBackground(0, 255, 0, 127);
         scannerAction.setIntervalTime(0.075);
         scannerAction.setIntervalCount(ADDRESSABLE_LED_COUNT * 5 * 2); // number of lights, how many times to update them, back and fourth
         setAction(scannerAction);
 
         ChaseAction chaseAction = new ChaseAction(245, 0, 255, 90);
+        chaseAction.setBackground(0, 255, 0, 127);
         chaseAction.setIntervalCount(-1);
         //setAction(chaseAction);
     }
 
     // Things to do when auto resets/inits.
     // This can be scheduled commands, command groups, etc.
+    // Note: this is going away, do what you want with status somewhere else.
     private void scheduleAutoActions() {
 
         // Power up to purple, and stay on.
@@ -130,6 +134,7 @@ public class Status extends Subsystem {
 
     // This is what we want to run when teleop starts.
     // This can be scheduled commands, command groups, etc.
+    // Note: this is going away, do what you want with status somewhere else.
     private void scheduleTeleOpActions() {
 
         // Power up to purple, and stay on - should be on already in match.
@@ -141,15 +146,16 @@ public class Status extends Subsystem {
         CommandGroup commandGroup = new CommandGroup();
 
         // With 40s to remain, warning.
-        commandGroup.addSequential(new WaitCommand(94));
+        commandGroup.addSequential(new WaitCommand(5)); //94
         LedAction warnAction = new LedAction(255, 127, 0, 127);
         commandGroup.addSequential(new ActionCommand(warnAction));
 
         // With 15s remain, go nuts to climb.
-        commandGroup.addSequential(new WaitCommand(24)); // 15 sec before match end (adding extra since it takes a bit to start an action)
+        commandGroup.addSequential(new WaitCommand(5)); //24 // 15 sec before match end (adding extra since it takes a bit to start an action)
 
         // Run the rainbow to indicate we need to climb.
         ChaseAction chaseAction = new ChaseAction(255, 127, 0, 90);
+        chaseAction.setBackground(245, 0, 255, 90);
         chaseAction.setIntervalCount(-1);
         commandGroup.addSequential(new ActionCommand(chaseAction));
 
@@ -178,8 +184,6 @@ public class Status extends Subsystem {
 
         // Resets the timer so that it represents "time since code init".
         timer.reset();
-
-        scheduleBootActions();
     }
 
     // Resets the class state for Auto mode.
@@ -190,8 +194,6 @@ public class Status extends Subsystem {
 
         // Resets the timer so that it represents "time since auto init".
         timer.reset();
-
-        scheduleAutoActions();
     }
 
     // Resets the class state for TeleOp mode.
@@ -202,8 +204,6 @@ public class Status extends Subsystem {
 
         // Resets the timer so that it represents "time since teleOp init".
         timer.reset();
-
-        scheduleTeleOpActions();
     }
 
     // Determines if the flashlight is on.

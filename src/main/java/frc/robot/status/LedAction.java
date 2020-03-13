@@ -17,6 +17,18 @@ public class LedAction extends Action {
     // How long to delay intervals.
     protected double intervalTime = 0.0;
 
+    // Default color.
+    protected int red = 255;
+    protected int green = 255;
+    protected int blue = 255;
+    protected int brightness = 127;
+
+    // Background color
+    int backRed = 0;
+    int backGreen = 0;
+    int backBlue = 0;
+    int backBrightness = 0;
+
     // Buffer this action uses for sending to the LEDs.
     protected AddressableLEDBuffer buffer = new AddressableLEDBuffer(Status.ADDRESSABLE_LED_COUNT);
 
@@ -29,16 +41,17 @@ public class LedAction extends Action {
 
     // Invoke with a specific color.
     public LedAction(int red, int green, int blue, int brightness) {
-        double b = brightness / 255.0;
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.brightness = brightness;
+    }
 
-        red = (int) (red * b);
-        green = (int) (green * b);
-        blue = (int) (blue * b);
-
-        // Set the entire buffer (string of leds) to the same color.
-        for (var i = 0; i < buffer.getLength(); i++) {
-            buffer.setRGB(i, red, green, blue);
-        }
+    public void setBackground(int red, int green, int blue, int brightness) {
+        this.backRed = red;
+        this.backGreen = green;
+        this.backBlue = blue;
+        this.backBrightness = brightness;
     }
 
     public void setIntervalTime(double intervalTime) {
@@ -55,6 +68,15 @@ public class LedAction extends Action {
     // intervalCount, and set/sending the buffer to the LEDs.
     protected void updateBuffer() {
 
+        double br = brightness / 255.0;
+        int r = (int) (red * br);
+        int g = (int) (green * br);
+        int b = (int) (blue * br);
+
+        // Set the entire buffer (string of leds) to the same color.
+        for (var i = 0; i < buffer.getLength(); i++) {
+            buffer.setRGB(i, r, g, b);
+        }
     }
 
     @Override
