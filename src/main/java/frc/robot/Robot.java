@@ -42,6 +42,8 @@ import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.magazine.Magazine;
 import frc.robot.oi.OI;
 
+import static frc.robot.turret.Turret.getTurret;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -69,13 +71,14 @@ public class Robot extends TimedRobot {
   private void initializeSubsystems() {
     // TEST: getStatus();
     getOI();
-    getDrivetrain();
-    getIntake();
-    getSpacer();
-    getMagazine();
-    getShooter();
-    getTelescope();
-    getIndexer();
+    getTurret();
+    // getDrivetrain();
+    // getIntake();
+    // getSpacer();
+    // getMagazine();
+    // getShooter();
+    // getTelescope();
+    // getIndexer();
 
     // No Control Panel subsystem hardware yet.
     // getControlPanel();
@@ -132,13 +135,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    getDrivetrain().resetHeading();
+    // getDrivetrain().resetHeading();
     Limelight.getLimelight().setDriverMode();
 
-    AutoMode mode;
+    // AutoMode mode;
     
     // GET THE AUTO MODE FROM THE HARDWARE SWITCH
-    mode = AutoRoutines.getSelectedAutoMode(); 
+    // mode = AutoRoutines.getSelectedAutoMode(); 
 
     // HARDCODE THE AUTO MODE FOR TESTING PURPOSES, BY-PASSING THE SWITCH
     // mode = AutoMode.TEST_RIGHT_TURN;
@@ -148,11 +151,11 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.TRENCH_AUTO;     
     // mode = AutoMode.NONE;
 
-    autonomousCommand = AutoRoutines.getAutoRoutine(mode);
+    // autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
-    if (autonomousCommand != null) {
-      autonomousCommand.start();
-    }
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.start();
+    // }
   }
 
   /**
@@ -161,7 +164,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-    HelixLogger.getInstance().saveLogs();
+    // HelixLogger.getInstance().saveLogs();
   }
 
   @Override
@@ -170,9 +173,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (autonomousCommand != null) {
-      autonomousCommand.cancel();
-    }
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.cancel();
+    // }
     Limelight.getLimelight().setDriverMode();
   }
 
@@ -182,7 +185,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    HelixLogger.getInstance().saveLogs();
+    // HelixLogger.getInstance().saveLogs();
     // SmartDashboard.putNumber("Throttle", OI.getOI().getThrottle());
     // SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
     // SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
