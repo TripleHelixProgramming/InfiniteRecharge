@@ -110,14 +110,14 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
-    SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
+    // SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
 
-    SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
-    SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
-    SmartDashboard.putNumber("Distance", Limelight.getLimelight().getDistanceToTarget());
-    SmartDashboard.putNumber("rpm", Limelight.getLimelight().getRPM());
+    // SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
+    // SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
+    // SmartDashboard.putNumber("Distance", Limelight.getLimelight().getDistanceToTarget());
+    // SmartDashboard.putNumber("rpm", Limelight.getLimelight().getRPM());
 
-    SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
+    // SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
 
     Limelight.getLimelight().setDriverMode();
   }
